@@ -10,8 +10,8 @@
     }
     @if (transaction(); as transaction) {
         <div class="transaction-hero"><span>{{ typeIcon(transaction.type) }}</span>
-            <div><strong>{{ transaction.merchant }}</strong><small>{{ transaction.reference }}</small></div>
-            <div><strong>{{ transaction.amount.amount | currency:transaction.amount.currency:'symbol-narrow' }}</strong><small>{{ transaction.occurredAt | date:'dd MMM yyyy, HH:mm' }}</small>
+            <div><strong>{{ transaction.merchant }}</strong><small>{{ transaction.occurredAt | date:'dd MMM yyyy, HH:mm' }}</small></div>
+            <div><strong>{{ transaction.amount.amount | currency:transaction.amount.currency:'symbol-narrow' }}</strong>
             </div>
         </div>
         <dl class="transaction-meta">
@@ -41,24 +41,6 @@
                           [class.posted]="transaction.status === 'POSTED'">{{ transactionStatus() }}</span></dd>
             </div>
         </dl>
-        @if (!transaction.disputeId) {
-            <div class="no-dispute"><h3>No non-closed dispute</h3>
-                @if (transaction.disputeEligible) {
-                    <p>This transaction is eligible for a dispute. Previous closed cases remain in the Disputes list.</p>
-                    <button type="button" [disabled]="busy()" (click)="disputeRequested.emit(transaction)">Dispute
-                        transaction
-                    </button>
-                } @else {
-                    <p>{{ transaction.disputeIneligibilityReason || 'This transaction is not eligible for a dispute.' }}</p>
-                }
-            </div>
-        }
-    }
-    @if (transaction()) {
-        <div class="history-link">
-            <button type="button" [disabled]="busy()" (click)="historyRequested.emit()">View all account disputes</button>
-            <small>Includes previous closed cases. Select a case to view its comments and timeline.</small>
-        </div>
     }
     @if (loading()) {
         <div class="detail-loading" role="status">Loading dispute details…</div>
@@ -100,5 +82,28 @@
         <p class="info-note">This timeline shows recorded updates for this dispute.</p>
     } @else if (!transaction() && !loading() && !error()) {
         <div class="no-selection">Select a transaction or dispute to view its details.</div>
+    }
+    @if (transaction(); as transaction) {
+        @if (!transaction.disputeId) {
+            <div class="payment-actions">
+                <div class="payment-action-copy">
+                    @if (transaction.disputeEligible) {
+                        <h3>Something wrong with this payment?</h3>
+                        <p>You can submit a dispute for this transaction.</p>
+                    } @else {
+                        <h3>Dispute unavailable</h3>
+                        <p>{{ transaction.disputeIneligibilityReason || 'This transaction is not eligible for a dispute.' }}</p>
+                    }
+                </div>
+                @if (transaction.disputeEligible) {
+                    <button class="dispute-payment" type="button" [disabled]="busy()"
+                            (click)="disputeRequested.emit(transaction)">Dispute payment <span aria-hidden="true">→</span></button>
+                }
+            </div>
+        }
+        <footer class="history-footer">
+            <button type="button" [disabled]="busy()" (click)="historyRequested.emit()">View account disputes <span aria-hidden="true">→</span></button>
+            <small>Includes closed cases</small>
+        </footer>
     }
 </section>
