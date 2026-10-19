@@ -12,7 +12,10 @@
     "build": "ng build --configuration production",
     "build:dev": "ng build --configuration development",
     "build:prod": "ng build --configuration production",
-    "generate:api": "openapi-typescript openapi/openapi.yaml -o src/app/generated/api-types.ts"
+    "generate:api": "openapi-typescript openapi/openapi.yaml -o src/app/generated/api-types.ts",
+    "test": "ng test --watch=false",
+    "test:watch": "ng test",
+    "test:types": "tsc --project tsconfig.spec.json --noEmit"
   },
   "dependencies": {
     "@angular/common": "21.2.25",
@@ -29,8 +32,10 @@
     "@angular/build": "21.2.25",
     "@angular/cli": "21.2.26",
     "@angular/compiler-cli": "21.2.25",
+    "jsdom": "27.0.0",
     "openapi-typescript": "7.10.1",
     "prettier": "3.6.2",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vitest": "4.0.8"
   }
 }

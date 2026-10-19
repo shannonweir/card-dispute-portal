@@ -181,12 +181,15 @@ docker compose up --build -d
 </details>
 
 <details>
-<summary>🔨 Build and format</summary>
+<summary>🔨 Build, test and format</summary>
 
 | Command | Result |
 | --- | --- |
 | `npm run build` / `npm run build:prod` | Optimized production bundle |
 | `npm run build:dev` | Development bundle with source maps |
+| `npm test` | Run the 34 unit/component tests once |
+| `npm run test:watch` | Rerun tests during development |
+| `npm run test:types` | Check test TypeScript without running tests |
 | `npm run format` | Format handwritten TypeScript with Prettier |
 | `npm run format:check` | Check TypeScript formatting |
 | `npm run generate:api` | Regenerate API types from the local contract |
@@ -195,7 +198,9 @@ Production browser output: `dist/card-dispute-portal/browser/`.
 
 Prettier settings are in [.prettierrc.json](.prettierrc.json). Keep blank lines between methods and logical sections. Generated API types retain their generator's formatting.
 
-This repository currently has no automated tests or npm test command. Build and formatting checks are available; verify user flows against a running backend when changing behavior.
+The 34 tests cover Auth0 login/logout and route access, customer/account isolation, dispute submission and validation, closed-case history, transaction-table actions and filters, history pagination, supporting-document validation and upload recovery, and idempotent retries. Tests run locally with isolated service doubles and Angular HTTP testing; no running backend or Auth0 login is required. They do not change the application’s real API/authentication configuration.
+
+Test files import `describe`, `it`, `expect` and other helpers explicitly from `vitest`; they do not rely on ambient test globals. Test compiler settings are in `tsconfig.spec.json`. In WebStorm, use the project’s installed TypeScript from `node_modules/typescript`. Run `npm run test:types` to check test types independently of the IDE.
 
 </details>
 
