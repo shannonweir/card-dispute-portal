@@ -1,0 +1,104 @@
+<section class="panel detail-panel">
+    <div class="panel-title"><h2>Transaction details</h2>
+        <button type="button" aria-label="Clear selection" [disabled]="busy()" (click)="selectionCleared.emit()">×
+        </button>
+    </div>
+    @if (error()) {
+        <div class="info-note" role="alert">{{ error() }}
+            <button type="button" (click)="refreshRequested.emit()">Retry details</button>
+        </div>
+    }
+    @if (transaction(); as transaction) {
+        <div class="transaction-hero"><span>{{ typeIcon(transaction.type) }}</span>
+            <div><strong>{{ transaction.merchant }}</strong><small>{{ transaction.reference }}</small></div>
+            <div><strong>{{ transaction.amount.amount | currency:transaction.amount.currency:'symbol-narrow' }}</strong><small>{{ transaction.occurredAt | date:'dd MMM yyyy, HH:mm' }}</small>
+            </div>
+        </div>
+        <dl class="transaction-meta">
+            <div>
+                <dt>Card number</dt>
+                <dd>{{ transaction.cardLastFour ? '•••• ' + transaction.cardLastFour : 'Not available' }}</dd>
+            </div>
+            <div>
+                <dt>Reference</dt>
+                <dd>{{ transaction.reference }}</dd>
+            </div>
+            <div>
+                <dt>Account type</dt>
+                <dd>{{ accountType() }}</dd>
+            </div>
+            <div>
+                <dt>Merchant location</dt>
+                <dd>{{ transaction.merchantLocation || 'Not available' }}</dd>
+            </div>
+            <div>
+                <dt>Category</dt>
+                <dd>{{ typeLabel(transaction.type) }}</dd>
+            </div>
+            <div>
+                <dt>Transaction status</dt>
+                <dd><span class="status"
+                          [class.posted]="transaction.status === 'POSTED'">{{ transactionStatus() }}</span></dd>
+            </div>
+        </dl>
+        @if (!transaction.disputeId) {
+            <div class="no-dispute"><h3>No non-closed dispute</h3>
+                @if (transaction.disputeEligible) {
+                    <p>This transaction is eligible for a dispute. Previous closed cases remain in the Disputes list.</p>
+                    <button type="button" [disabled]="busy()" (click)="disputeRequested.emit(transaction)">Dispute
+                        transaction
+                    </button>
+                } @else {
+                    <p>{{ transaction.disputeIneligibilityReason || 'This transaction is not eligible for a dispute.' }}</p>
+                }
+            </div>
+        }
+    }
+    @if (transaction()) {
+        <div class="history-link">
+            <button type="button" [disabled]="busy()" (click)="historyRequested.emit()">View all account disputes</button>
+            <small>Includes previous closed cases. Select a case to view its comments and timeline.</small>
+        </div>
+    }
+    @if (loading()) {
+        <div class="detail-loading" role="status">Loading dispute details…</div>
+    }
+    @if (dispute(); as dispute) {
+        <section class="timeline-section">
+            <h3>{{ dispute.reference }}</h3>
+            <p>Dispute status: <strong>{{ statusLabel(dispute.status) }}</strong></p>
+            <section class="submission-details" aria-label="Your submitted comments">
+                <h3>Your comments</h3>
+                <p>{{ dispute.details }}</p>
+                <small>Submitted {{ dispute.createdAt | date:'dd MMM yyyy, HH:mm' }}</small>
+            </section>
+            <div class="detail-actions">
+                <button type="button" (click)="documentsRequested.emit()">Supporting documents</button>
+                <button type="button" [disabled]="loading()" (click)="refreshRequested.emit()">Refresh timeline</button>
+            </div>
+            <h3>Dispute timeline</h3>
+            <ol class="timeline">
+                @for (event of timeline(); track event.id; let last = $last) {
+                    <li [class.action]="event.actionRequired" [class.last]="last"><span
+                            class="timeline-dot">{{ event.status === 'SUBMITTED' ? '✓' : '' }}</span>
+                        <div><strong>{{ event.title }}</strong>
+                            <time>{{ event.occurredAt | date:'dd MMM yyyy, HH:mm' }}</time>
+                            <p>{{ event.description }}</p>
+                            @if (event.actionRequired) {
+                                <button type="button" (click)="documentsRequested.emit()">Upload documents</button>
+                            }
+                        </div>
+                    </li>
+                } @empty {
+                    <li>No timeline events are available.</li>
+                }
+            </ol>
+            @if (dispute.resolutionNote) {
+                <p>{{ dispute.resolutionNote }}</p>
+            }
+        </section>
+        <p class="info-note">This timeline shows recorded updates for this dispute.</p>
+    } @else if (!transaction() && !loading() && !error()) {
+        <div class="no-selection">Select a transaction or dispute to view its details.</div>
+    }
+</section>

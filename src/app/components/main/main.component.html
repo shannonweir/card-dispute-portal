@@ -1,0 +1,59 @@
+<div class="main-layout">
+    <app-sidebar/>
+    <main class="workspace">
+        <section class="customer-profile" aria-label="Customer and account selection">
+            @if (context.loading()) {
+                <p role="status">Loading your accounts…</p>
+            } @else if (context.error()) {
+                <p role="alert">{{ context.error() }}</p>
+                <button type="button" (click)="context.load()">Try again</button>
+            } @else if (context.customer(); as customer) {
+                <div class="customer-name">
+                    <strong>{{ customer.displayName }}</strong><span>{{ customer.type === 'BUSINESS' ? 'Business customer' : 'Individual customer' }}</span>
+                </div>
+                <label for="account-filter">Account</label>
+                <select id="account-filter" #accountSelect [value]="context.accountId() ?? ''"
+                        (change)="context.selectAccount(accountSelect.value)">
+                    <option value="" disabled>Choose an account</option>
+                    @for (account of customer.accounts; track account.id) {
+                        <option [value]="account.id">{{ account.displayName }} · {{ account.maskedNumber }}
+                            · {{ account.currency }}
+                        </option>
+                    }
+                </select>
+                @if (context.selectedAccount()) {
+                    <button class="view-accounts" type="button" (click)="context.selectAccount('')">View accounts
+                    </button>
+                }
+            }
+        </section>
+
+        @if (context.customer(); as customer) {
+            @if (context.selectedAccount()) {
+                <router-outlet/>
+            } @else {
+                <section class="accounts-overview" aria-labelledby="accounts-heading">
+                    <header>
+                        <p class="eyebrow">Your banking</p>
+                        <h1 id="accounts-heading">Your accounts</h1>
+                        <p>Choose an account to view its transactions and disputes.</p>
+                    </header>
+                    <div class="account-grid">
+                        @for (account of customer.accounts; track account.id) {
+                            <button class="account-card" type="button" [attr.data-account-id]="account.id"
+                                    (click)="context.selectAccount(account.id)"
+                                    [attr.aria-label]="'View ' + account.displayName + ' ' + account.maskedNumber">
+                                <span class="account-type">{{ accountTypeLabels[account.type] }}</span>
+                                <strong>{{ account.displayName }}</strong>
+                                <span class="account-number">{{ account.maskedNumber }}</span>
+                                <span class="account-footer"><span>{{ account.currency }}</span><span>View account →</span></span>
+                            </button>
+                        } @empty {
+                            <p class="no-accounts">No accounts are available for your customer profile.</p>
+                        }
+                    </div>
+                </section>
+            }
+        }
+    </main>
+</div>

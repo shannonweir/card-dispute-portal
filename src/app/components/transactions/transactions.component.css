@@ -1,0 +1,270 @@
+:host {
+    display: block;
+    min-width: 0;
+}
+
+button, select, input {
+    font: inherit;
+}
+
+.panel {
+    min-width: 0;
+    background: rgba(255, 255, 255, .94);
+    border: 1px solid #e1e7ef;
+    border-radius: 9px;
+    box-shadow: 0 4px 18px rgba(27, 49, 79, .04);
+    overflow: hidden;
+}
+
+.panel-title {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.panel-title h2 {
+    margin: 0;
+    font-size: 17px;
+    letter-spacing: -.02em;
+}
+
+.filters {
+    padding: 0 15px 13px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+.date-filter, .type-filter select, .search-filter {
+    height: 38px;
+    border: 1px solid #cfd8e6;
+    background: white;
+    border-radius: 6px;
+    color: #243653;
+    font-size: 11px;
+}
+
+.date-filter {
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.date-filter b {
+    margin-left: auto;
+}
+
+.type-filter select {
+    width: 100%;
+    padding: 0 11px;
+}
+
+.search-filter {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    padding: 0 11px;
+}
+
+.search-filter span {
+    font-size: 20px;
+    color: #4c5f7c;
+}
+
+.search-filter input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    outline: 0;
+    padding: 0 10px;
+    color: #233650;
+}
+
+.search-filter input::placeholder {
+    color: #7e8ba0;
+}
+
+.table-wrap {
+    min-height: 420px;
+    overflow-x: auto;
+    border-top: 1px solid #edf0f5;
+    transition: opacity .2s;
+}
+
+.table-wrap.loading {
+    opacity: .48;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 620px;
+}
+
+th {
+    height: 34px;
+    padding: 0 14px;
+    text-align: left;
+    color: #40506a;
+    background: #f6f8fc;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+td {
+    height: 48px;
+    border-bottom: 1px solid #edf0f5;
+    padding: 6px 14px;
+    font-size: 10px;
+    color: #42516a;
+}
+
+tr {
+    cursor: pointer;
+}
+
+tbody tr:hover, tbody tr.selected {
+    background: #edf7fa;
+}
+
+tbody tr.selected {
+    box-shadow: inset 3px 0 var(--capitec-red);
+}
+
+td strong, td small {
+    display: block;
+}
+
+td strong {
+    color: #111a2b;
+    font-size: 11px;
+}
+
+td small {
+    margin-top: 3px;
+    color: #66758d;
+}
+
+.merchant {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.merchant > span {
+    width: 20px;
+    text-align: center;
+    filter: grayscale(1);
+    font-size: 15px;
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 14px;
+    background: var(--capitec-blue-light);
+    color: var(--capitec-blue-dark);
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.status.posted {
+    background: #eef1f4;
+    color: #546177;
+}
+
+.status.progress {
+    background: #fff0d1;
+    color: #92600c;
+}
+
+.status.resolved {
+    background: #dff4e7;
+    color: #157440;
+}
+
+.outline-button {
+    min-width: 60px;
+    height: 30px;
+    border: 1px solid var(--capitec-blue);
+    border-radius: 6px;
+    background: white;
+    color: var(--capitec-blue);
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.empty-row {
+    height: 200px;
+    text-align: center;
+    color: #718097;
+}
+
+.pagination {
+    min-height: 48px;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #64728a;
+    font-size: 10px;
+}
+
+.pagination > div {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}
+
+.pagination button {
+    min-width: 27px;
+    height: 27px;
+    border: 1px solid #dce3ed;
+    border-radius: 5px;
+    background: white;
+    color: #44536c;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background: var(--capitec-blue);
+    color: white;
+    border-color: var(--capitec-blue);
+}
+
+.pagination button:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 640px) {
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .search-filter {
+        grid-column: auto;
+    }
+
+    .pagination {
+        align-items: flex-start;
+        gap: 8px;
+        flex-direction: column;
+    }
+}

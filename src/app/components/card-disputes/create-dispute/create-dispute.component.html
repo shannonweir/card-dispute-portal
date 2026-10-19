@@ -1,0 +1,69 @@
+<aside class="panel dispute-drawer" aria-labelledby="dispute-title">
+    <div class="panel-title"><h2 id="dispute-title">Submit a Dispute</h2>
+        <button type="button" aria-label="Close dispute form" [disabled]="saving()" (click)="closed.emit()">×</button>
+    </div>
+    <div class="drawer-scroll">
+        <div class="selected-summary">
+            <span>{{ typeIcon(transaction().type) }}</span>
+            <div>
+                <strong>{{ transaction().merchant }}</strong><small>{{ transaction().occurredAt | date:'dd MMM yyyy, HH:mm' }}</small><small>{{ transaction().reference }}</small>
+            </div>
+            <strong>{{ transaction().amount.amount | currency:transaction().amount.currency:'symbol-narrow' }}</strong>
+        </div>
+        @if (submissionError() || fileError()) {
+            <div class="form-error" role="alert">{{ fileError() || submissionError() }}</div>
+        }
+        <form id="dispute-form" [formGroup]="disputeForm" (ngSubmit)="submit()">
+            <fieldset [disabled]="saving()">
+                <label for="reason">Dispute reason <b>*</b></label>
+                <select id="reason" formControlName="reason">
+                    <option value="" disabled>Select a reason</option>
+                    @for (reason of reasons(); track reason.code) {
+                        <option [value]="reason.code">{{ reason.label }}</option>
+                    }
+                </select>
+                @if (disputeForm.controls.reason.touched && disputeForm.controls.reason.invalid) {
+                    <small class="field-error">Choose a dispute reason.</small>
+                }
+
+                <label for="details">Additional details <b>*</b></label>
+                <textarea id="details" formControlName="details" rows="6" maxlength="2000"
+                          placeholder="Please provide as much detail as possible about why you are disputing this transaction."></textarea>
+                <div class="textarea-meta">
+                    <span>@if (disputeForm.controls.details.touched && disputeForm.controls.details.invalid) {
+                        Please provide at least 10 characters.
+                    }</span><span>{{ disputeForm.controls.details.value.length }}/2000</span></div>
+
+                <label>Supporting documents <span>(optional)</span> ⓘ</label>
+                <label class="upload-zone" for="document">
+                    <input id="document" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+                           (change)="chooseFile($event)">
+                    <strong>⇧</strong>
+                    @if (selectedFile(); as file) {
+                        <b>{{ file.name }}</b><small>{{ (file.size / 1024).toFixed(0) }} KB selected</small>
+                    } @else {
+                        <b>Click to upload</b><small>PDF, JPG or PNG (max 5MB per
+                            file)</small>
+                    }
+                </label>
+                <div class="document-help"><strong>Examples of supporting documents:</strong>
+                    <ul>
+                        <li>Screenshot of transaction</li>
+                        <li>Receipt (if available)</li>
+                        <li>Communication with merchant</li>
+                        <li>Any other relevant information</li>
+                    </ul>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    @if (validationError() || submissionError()) {
+        <p class="submit-error" role="alert">{{ validationError() || submissionError() }}</p>
+    }
+    <footer class="drawer-actions">
+        <button type="button" [disabled]="saving()" (click)="closed.emit()">Cancel</button>
+        <button type="button" (click)="submit()"
+                [disabled]="saving()">{{ saving() ? 'Submitting…' : 'Submit Dispute' }}
+        </button>
+    </footer>
+</aside>

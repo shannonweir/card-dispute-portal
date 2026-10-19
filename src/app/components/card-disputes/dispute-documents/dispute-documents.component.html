@@ -1,0 +1,49 @@
+<section class="documents-panel" aria-labelledby="documents-heading">
+    <header>
+        <div><h2 id="documents-heading">Supporting documents</h2>
+            <p>{{ reference() }}</p></div>
+        <button type="button" (click)="closed.emit()" [disabled]="uploading()" aria-label="Close supporting documents">
+            ×
+        </button>
+    </header>
+    @if (notice()) {
+        <p class="notice" role="status">{{ notice() }}</p>
+    }
+    <p>Attach evidence to this existing dispute. PDF, PNG or JPEG, up to 5 MB.</p>
+    <label for="evidence-file">Choose a document</label>
+    <input id="evidence-file" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+           [disabled]="uploading()" (change)="chooseFile($event)">
+    @if (selectedFile(); as file) {
+        <p>{{ file.name }} · {{ (file.size / 1024).toFixed(1) }} KB</p>
+    }
+    @if (uploadError()) {
+        <p class="error" role="alert">{{ uploadError() }}</p>
+    }
+    @if (success()) {
+        <p class="success" role="status">{{ success() }}</p>
+    }
+    <button class="upload" type="button" [disabled]="!selectedFile() || uploading()"
+            (click)="upload()">{{ uploading() ? 'Uploading…' : 'Upload document' }}
+    </button>
+    <div class="list-heading"><h3>Uploaded documents</h3>
+        <button type="button" [disabled]="loading()" (click)="refresh()">Refresh documents</button>
+    </div>
+    @if (loading()) {
+        <p role="status">Loading documents…</p>
+    }
+    @if (loadError()) {
+        <p class="error" role="alert">{{ loadError() }}</p>
+        <button type="button" (click)="refresh()">Retry loading documents</button>
+    }
+    <ul>
+        @for (document of documents(); track document.id) {
+            <li><strong>{{ document.fileName }}</strong><small>{{ document.uploadedAt | date:'dd MMM yyyy, HH:mm' }}
+                · {{ (document.sizeBytes / 1024).toFixed(1) }} KB</small>
+            </li>
+        } @empty {
+            @if (!loading() && !loadError()) {
+                <li>No documents have been uploaded.</li>
+            }
+        }
+    </ul>
+</section>

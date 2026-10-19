@@ -1,0 +1,220 @@
+:host {
+    display: block;
+    max-width: 1380px;
+    margin: 0 auto;
+}
+
+.error-banner {
+    margin: 0 20px 14px;
+    padding: 12px 14px;
+    border: 1px solid #f4c7c7;
+    border-radius: 8px;
+    background: #fff1f1;
+    color: #8d2831;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.error-banner strong, .error-banner span {
+    display: block;
+}
+
+.error-banner span {
+    margin-top: 3px;
+    font-size: 11px;
+}
+
+.error-banner button {
+    border: 1px solid #d99197;
+    border-radius: 5px;
+    padding: 7px 11px;
+    background: white;
+    color: inherit;
+    cursor: pointer;
+}
+
+.list.loading {
+    opacity: .5;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: minmax(460px, 1.15fr) minmax(380px, .85fr);
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.panel {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #dfe8ed;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 5px 18px rgba(16, 57, 76, .05);
+}
+
+.panel > header {
+    min-height: 66px;
+    padding: 0 17px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #edf1f4;
+}
+
+.panel h2 {
+    margin: 3px 0 0;
+    color: var(--capitec-ink);
+    font-size: 17px;
+}
+
+.panel header a {
+    color: var(--capitec-blue);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.list {
+    min-height: 315px;
+    transition: opacity .2s;
+}
+
+.list article {
+    min-height: 63px;
+    padding: 10px 17px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #edf1f4;
+}
+
+.list article:last-child {
+    border-bottom: 0;
+}
+
+.transaction-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #eef5f7;
+    filter: grayscale(1);
+}
+
+.transaction-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.transaction-copy strong, .transaction-copy small, .transaction-amount strong, .transaction-amount small, .dispute-activity article strong, .dispute-activity article small {
+    display: block;
+}
+
+.transaction-copy strong, .dispute-activity article strong {
+    overflow: hidden;
+    color: #162a38;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.transaction-copy small, .transaction-amount small, .dispute-activity article small {
+    margin-top: 4px;
+    color: #7a8998;
+    font-size: 9px;
+}
+
+.transaction-amount {
+    text-align: right;
+}
+
+.transaction-amount strong {
+    font-size: 11px;
+}
+
+.attention-count {
+    padding: 5px 8px;
+    border-radius: 12px;
+    background: #fdebed;
+    color: #bb2630;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border-radius: 50%;
+    background: var(--capitec-blue);
+}
+
+.status-dot.attention {
+    background: var(--capitec-red);
+}
+
+.dispute-activity article > div {
+    min-width: 0;
+    flex: 1;
+}
+
+.status {
+    padding: 5px 8px;
+    border-radius: 12px;
+    background: var(--capitec-blue-light);
+    color: var(--capitec-blue-dark);
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+.status.attention {
+    background: #fdebed;
+    color: #b5212b;
+}
+
+.status.resolved {
+    background: #e2f3e9;
+    color: #177044;
+}
+
+.dispute-activity footer {
+    padding: 13px 17px;
+    border-top: 1px solid #edf1f4;
+}
+
+.dispute-activity footer a {
+    display: flex;
+    justify-content: space-between;
+    color: var(--capitec-blue);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.empty {
+    padding: 35px 17px;
+    color: #758595;
+    text-align: center;
+    font-size: 11px;
+}
+
+@media (max-width: 1050px) {
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .overview-grid {
+        padding-inline: 6px;
+    }
+
+    .panel > header {
+        align-items: flex-start;
+        padding-block: 14px;
+    }
+}

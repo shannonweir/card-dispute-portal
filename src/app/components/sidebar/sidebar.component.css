@@ -1,0 +1,182 @@
+:host {
+    display: block;
+}
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    box-sizing: border-box;
+    padding: 18px 10px 22px;
+    color: #f7f9fd;
+    background: linear-gradient(165deg, #006b96, #004b70 70%, #00344f);
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+}
+
+.bank-brand {
+    margin: 0 10px 24px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0, 35, 55, .2);
+}
+
+.bank-brand img {
+    display: block;
+    width: 100%;
+    height: 60px;
+    object-fit: contain;
+}
+
+.sidebar nav {
+    display: grid;
+    gap: 4px;
+}
+
+.sidebar nav a, .logout {
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #e5eaf3;
+    padding: 11px 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    text-align: left;
+    text-decoration: none;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.sidebar nav a span, .logout span {
+    width: 18px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.sidebar nav a.active {
+    background: rgba(255, 255, 255, .16);
+    box-shadow: inset 3px 0 var(--capitec-red);
+    color: white;
+}
+
+.sidebar-user {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 13px 10px;
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 50%;
+    background: #eef3fb;
+    color: #283b58;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 11px;
+}
+
+.sidebar-user strong, .sidebar-user small {
+    display: block;
+}
+
+.sidebar-user strong {
+    max-width: 92px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
+    text-transform: capitalize;
+}
+
+.sidebar-user small {
+    margin-top: 3px;
+    color: #b8c3d5;
+    font-size: 10px;
+}
+
+.logout {
+    margin-top: 2px;
+}
+
+@media (max-width: 980px) {
+    .bank-brand {
+        width: 48px;
+        margin-inline: auto;
+        padding: 4px;
+    }
+
+    .bank-brand img {
+        height: 38px;
+    }
+
+    .sidebar nav a, .logout {
+        justify-content: center;
+        font-size: 0;
+    }
+
+    .sidebar nav a span, .logout span {
+        font-size: 18px;
+    }
+
+    .sidebar-user > div:last-child {
+        display: none;
+    }
+
+    .sidebar-user {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: 58px;
+        padding: 8px 12px;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .bank-brand {
+        width: 66px;
+        margin: 0 auto 0 0;
+        padding: 3px 5px;
+    }
+
+    .bank-brand img {
+        height: 38px;
+    }
+
+    .sidebar nav {
+        display: flex;
+    }
+
+    .sidebar nav a {
+        width: auto;
+        padding-inline: 9px;
+        font-size: 0;
+    }
+
+    .sidebar nav a.active {
+        font-size: 11px;
+    }
+
+    .sidebar-user {
+        display: none;
+    }
+
+    .logout {
+        width: 40px;
+        margin: 0;
+    }
+}

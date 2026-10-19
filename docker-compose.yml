@@ -1,0 +1,19 @@
+name: card-dispute-portal
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "127.0.0.1:4200:80"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1/"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+networks:
+  backend:
+    external: true
+    name: card-dispute-service_default

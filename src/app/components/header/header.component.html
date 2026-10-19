@@ -1,0 +1,48 @@
+<header class="page-header">
+    <div>
+        @if (eyebrow()) {
+            <span class="eyebrow">{{ eyebrow() }}</span>
+        }
+        <h1>{{ title() }}</h1>
+        <p>{{ description() }}</p>
+    </div>
+    @if (actionLabel()) {
+        <a class="primary-action" [routerLink]="actionLink()">{{ actionLabel() }} <span>→</span></a>
+    } @else if (showNotification()) {
+        <button class="notification" type="button" aria-label="Notifications">♧<span></span></button>
+    }
+</header>
+
+<section class="summary-grid" aria-label="Dispute summary" [class.loading]="loading()">
+    <article>
+        <span class="summary-icon blue">▣</span>
+        <div>
+            <small>Total Transactions</small><strong>{{ summary().totalTransactions }}</strong><em class="neutral">Selected
+            account filter</em>
+        </div>
+    </article>
+    <article>
+        <span class="summary-icon amber">▢</span>
+        <div>
+            <small>Disputes Submitted</small><strong>{{ summary().disputesSubmitted }}</strong><em class="neutral">Submitted
+            cases</em>
+        </div>
+    </article>
+    <article>
+        <span class="summary-icon green">⌛</span>
+        <div>
+            <small>In Progress</small><strong>{{ summary().inProgress }}</strong><em class="neutral">Under review</em>
+        </div>
+    </article>
+    <article><span class="summary-icon purple">◉</span>
+        <div>
+            <small>Resolved</small><strong>{{ summary().resolved }}</strong><em class="neutral">Resolved or closed
+            cases</em>
+        </div>
+    </article>
+    <article><span class="summary-icon amber">×</span>
+        <div>
+            <small>Rejected</small><strong>{{ summary().rejected }}</strong><em class="neutral">Rejected cases</em>
+        </div>
+    </article>
+</section>

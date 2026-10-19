@@ -1,0 +1,68 @@
+<app-header
+        [summary]="summary()"
+        [loading]="loading()"
+        eyebrow="Account overview"
+        title="Welcome back"
+        description="Here’s a quick view of your recent card and dispute activity."
+        actionLabel="View card disputes"
+        actionLink="/card-disputes"
+        [showNotification]="false"
+/>
+
+@if (error()) {
+    <section class="error-banner" role="alert">
+        <div><strong>Dashboard unavailable</strong><span>{{ error() }}</span></div>
+        <button type="button" (click)="loadOverview()">Try again</button>
+    </section>
+}
+
+<div class="overview-grid">
+    <section class="panel recent-transactions">
+        <header>
+            <div><p class="eyebrow">Latest activity</p>
+                <h2>Recent transactions</h2></div>
+            <a routerLink="/card-disputes">View all →</a></header>
+        <div class="list" [class.loading]="loading()">
+            @for (transaction of transactions(); track transaction.id) {
+                <article>
+                    <span class="transaction-icon">{{ typeIcon(transaction.type) }}</span>
+                    <div class="transaction-copy">
+                        <strong>{{ transaction.merchant }}</strong><small>{{ context.accountLabel(transaction.accountId) }}
+                        · {{ typeLabel(transaction.type) }}
+                        · {{ transaction.occurredAt | date:'dd MMM, HH:mm' }}</small></div>
+                    <div class="transaction-amount">
+                        <strong>{{ transaction.amount.amount | currency:transaction.amount.currency:'symbol-narrow' }}</strong><small>{{ transaction.status === 'POSTED' ? 'Posted' : transaction.status }}</small>
+                    </div>
+                </article>
+            } @empty {
+                @if (!loading()) {
+                    <p class="empty">No recent transactions found.</p>
+                }
+            }
+        </div>
+    </section>
+
+    <section class="panel dispute-activity">
+        <header>
+            <div><p class="eyebrow">Dispute activity</p>
+                <h2>Recent disputes</h2></div>
+            <span class="attention-count">{{ attentionDisputes().length }} need attention</span></header>
+        <div class="list" [class.loading]="loading()">
+            @for (dispute of disputes(); track dispute.id) {
+                <article>
+                    <span class="status-dot" [class.attention]="dispute.status === 'INFORMATION_REQUESTED'"></span>
+                    <div>
+                        <strong>{{ dispute.reference }}</strong><small>Updated {{ dispute.updatedAt | date:'dd MMM yyyy' }}</small>
+                    </div>
+                    <span class="status" [class.attention]="dispute.status === 'INFORMATION_REQUESTED'"
+                          [class.resolved]="dispute.status === 'RESOLVED'">{{ statusLabel(dispute.status) }}</span>
+                </article>
+            } @empty {
+                @if (!loading()) {
+                    <p class="empty">No disputes found.</p>
+                }
+            }
+        </div>
+        <footer><a routerLink="/card-disputes">Open dispute centre <span>→</span></a></footer>
+    </section>
+</div>

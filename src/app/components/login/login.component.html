@@ -1,0 +1,63 @@
+<main class="login-shell">
+    <section class="brand-panel" aria-label="Capitec card dispute portal introduction">
+        <a class="brand" href="/" aria-label="Capitec home">
+            <img src="assets/capitec-logo.png" alt="Capitec Bank">
+        </a>
+        <div class="brand-copy">
+            <p class="eyebrow">Secure dispute centre</p>
+            <h1>Simple card disputes.<br><em>Clear peace of mind.</em></h1>
+            <p>Review card activity, raise a dispute, and follow every step toward resolution in one protected
+                place.</p>
+        </div>
+        <div class="security-note">
+            <span aria-hidden="true">◆</span>
+            <div><strong>Bank-grade protection</strong><small>Your session and account data are securely
+                protected.</small></div>
+        </div>
+    </section>
+
+    <section class="form-panel">
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            <p class="eyebrow">Capitec online banking</p>
+            <h2>Sign in to your account</h2>
+            <p class="subhead">{{ mockMode ? 'Enter your demo details to access the dispute centre.' : 'Continue to secure sign-in to access the dispute centre.' }}</p>
+
+            @if (error()) {
+                <div class="alert" role="alert">{{ error() }}</div>
+            }
+
+            @if (mockMode) {
+                <label for="email">Email address</label>
+                <input id="email" type="email" formControlName="email" autocomplete="username"
+                       placeholder="you@example.com">
+                @if (form.controls.email.touched && form.controls.email.invalid) {
+                    <small class="field-error">Enter a valid email address.</small>
+                }
+
+                <label for="password">Password</label>
+                <div class="password-field">
+                    <input id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+                           autocomplete="current-password" placeholder="Your password">
+                    <button type="button" (click)="showPassword.set(!showPassword())"
+                            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+                        {{ showPassword() ? 'Hide' : 'Show' }}
+                    </button>
+                </div>
+                @if (form.controls.password.touched && form.controls.password.invalid) {
+                    <small class="field-error">Password must contain at least 8 characters.</small>
+                }
+            }
+
+            <button class="primary" type="submit" [disabled]="loading()">
+                {{ loading() ? 'Redirecting…' : 'Sign in securely' }}
+                <span aria-hidden="true">→</span>
+            </button>
+            @if (mockMode) {
+                <p class="demo"><strong>Demo access</strong><br>alex@example.com · Welcome123!</p>
+            } @else {
+                <p class="demo"><strong>Protected by Auth0</strong><br>Your password is entered only on Auth0 Universal
+                    Login.</p>
+            }
+        </form>
+    </section>
+</main>

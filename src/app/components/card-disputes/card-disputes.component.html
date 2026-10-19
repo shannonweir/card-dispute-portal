@@ -1,0 +1,52 @@
+<app-header [summary]="facade.summary()"/>
+<nav class="view-tabs" aria-label="Account activity">
+    <button type="button" [class.active]="facade.view() === 'transactions'"
+            [attr.aria-pressed]="facade.view() === 'transactions'" [disabled]="facade.saving()"
+            (click)="facade.showView('transactions')">Transactions
+    </button>
+    <button type="button" [class.active]="facade.view() === 'disputes'"
+            [attr.aria-pressed]="facade.view() === 'disputes'" [disabled]="facade.saving()"
+            (click)="facade.showView('disputes')">My disputes
+    </button>
+</nav>
+@if (facade.pageError()) {
+    <section class="error-banner" role="alert">
+        <div><strong>We couldn’t load your account</strong><span>{{ facade.pageError() }}</span></div>
+        <button type="button" (click)="facade.initialize()">Try again</button>
+    </section>
+}
+<div class="dashboard-grid" [class.with-drawer]="facade.drawerOpen() || facade.documentsOpen()">
+    @if (facade.view() === 'transactions') {
+        <app-transactions [transactionPage]="facade.transactionPage()"
+                          [selectedTransactionId]="facade.selectedTransaction()?.id ?? null"
+                          [loading]="facade.loading()"
+                          [query]="facade.query()" [typeFilter]="facade.typeFilter()"
+                          (transactionSelected)="facade.selectTransaction($event)"
+                          (disputeRequested)="facade.startDispute($event)"
+                          (searchChanged)="facade.onSearch($event)" (typeChanged)="facade.onTypeChange($event)"
+                          (pageChanged)="facade.goToPage($event)"/>
+    } @else {
+        <app-dispute-list [page]="facade.disputePage()" [status]="facade.statusFilter()"
+                          [selectedId]="facade.selectedDisputeId()" [loading]="facade.disputesLoading()"
+                          (statusChanged)="facade.onStatusChange($event)" (pageChanged)="facade.goToDisputePage($event)"
+                          (disputeSelected)="facade.selectDispute($event)"/>
+    }
+    <app-dispute-details [transaction]="facade.selectedTransaction()" [dispute]="facade.selectedDispute()"
+                         [timeline]="facade.timeline()"
+                         [loading]="facade.detailLoading()" [error]="facade.detailError()" [busy]="facade.saving()"
+                         (selectionCleared)="facade.clearSelection()" (disputeRequested)="facade.startDispute($event)"
+                         (documentsRequested)="facade.openDocuments()" (refreshRequested)="facade.retryDetails()"
+                         (historyRequested)="facade.showDisputeHistory()"/>
+    @if (facade.drawerOpen() && facade.selectedTransaction(); as transaction) {
+        <app-create-dispute [transaction]="transaction" [reasons]="facade.reasons()" [saving]="facade.saving()"
+                            [submissionError]="facade.formError()"
+                            (closed)="facade.closeDrawer()" (submitted)="facade.submitDispute($event)"/>
+    }
+    @if (facade.documentsOpen() && facade.selectedDispute(); as dispute) {
+        @for (item of [dispute]; track item.id) {
+            <app-dispute-documents [disputeId]="item.id" [reference]="item.reference"
+                                   [initialFile]="facade.pendingDocument()" [notice]="facade.documentNotice()"
+                                   (closed)="facade.closeDocuments()" (uploaded)="facade.attachmentUploaded()"/>
+        }
+    }
+</div>

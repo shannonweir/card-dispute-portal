@@ -1,0 +1,13 @@
+<aside class="sidebar">
+    <a class="bank-brand" routerLink="/dashboard" aria-label="Capitec dashboard"><img src="assets/capitec-logo.png"
+                                                                                      alt="Capitec Bank"></a>
+    <nav aria-label="Primary navigation">
+        <a routerLink="/dashboard" routerLinkActive="active"><span>⌂</span>Dashboard</a>
+        <a routerLink="/card-disputes" routerLinkActive="active"><span>▤</span>Card Disputes</a>
+    </nav>
+    <div class="sidebar-user">
+        <div class="avatar">{{ initials() }}</div>
+        <div><strong>{{ displayName() }}</strong><small>Customer</small></div>
+    </div>
+    <button type="button" class="logout" (click)="auth.logout()"><span>↪</span>Logout</button>
+</aside>

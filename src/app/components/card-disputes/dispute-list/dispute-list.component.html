@@ -1,0 +1,53 @@
+<section class="cases-panel" aria-labelledby="cases-heading">
+    <header><h2 id="cases-heading">My disputes</h2><label>Status <select #filter [value]="status()"
+                                                                         (change)="statusChanged.emit($any(filter.value))">
+        <option value="">All statuses</option>@for (option of statuses; track option) {
+        <option [value]="option">{{ statusLabel(option) }}</option>
+    }</select></label></header>
+    @if (loading()) {
+        <p role="status">Loading disputes…</p>
+    }
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>Reference</th>
+                <th>Submitted</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (dispute of page().content; track dispute.id) {
+                    <tr [class.selected]="selectedId() === dispute.id">
+                        <td>{{ dispute.reference }}</td>
+                        <td>{{ dispute.createdAt | date:'dd MMM yyyy, HH:mm' }}</td>
+                        <td>{{ statusLabel(dispute.status) }}</td>
+                        <td>
+                            <button type="button" (click)="disputeSelected.emit(dispute)"
+                                    [attr.aria-label]="'View dispute ' + dispute.reference">View
+                            </button>
+                        </td>
+                    </tr>
+                } @empty {
+                    @if (!loading()) {
+                        <tr>
+                            <td colspan="4">No disputes match this account and status.</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <footer><span>{{ page().totalElements }} disputes · Page {{ page().totalPages ? page().page + 1 : 0 }}
+        of {{ page().totalPages }}</span>
+        <div>
+            <button type="button" [disabled]="loading() || page().page === 0"
+                    (click)="pageChanged.emit(page().page - 1)">Previous
+            </button>
+            <button type="button" [disabled]="loading() || page().page + 1 >= page().totalPages"
+                    (click)="pageChanged.emit(page().page + 1)">Next
+            </button>
+        </div>
+    </footer>
+</section>

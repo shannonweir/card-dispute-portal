@@ -1,0 +1,15 @@
+.idea/
+.DS_Store
+node_modules/
+dist/
+.angular/
+*.log
+
+# Generated output
+out-tsc/
+coverage/
+
+# Local configuration
+.env
+.env.*
+!.env.example
