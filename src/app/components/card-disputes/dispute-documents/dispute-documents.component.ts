@@ -125,9 +125,11 @@ export class DisputeDocumentsComponent {
     }
 
     private validate(file: File): string {
-        if (!file.size) return 'Choose a non-empty file.';
+        if (!file.size)
+            return 'Choose a non-empty file.';
 
-        if (file.size > 5 * 1024 * 1024) return 'Files must be 5 MB or smaller.';
+        if (file.size > 5 * 1024 * 1024)
+            return 'Files must be 5 MB or smaller.';
 
         if (!['application/pdf', 'image/png', 'image/jpeg'].includes(file.type))
             return 'Choose a PDF, PNG or JPEG file.';

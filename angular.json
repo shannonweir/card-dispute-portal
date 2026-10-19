@@ -52,7 +52,7 @@
             "development": { "buildTarget": "card-dispute-portal:build:development" }
           },
           "defaultConfiguration": "development",
-          "options": {}
+          "options": { "proxyConfig": "proxy.conf.json" }
         }
       }
     }

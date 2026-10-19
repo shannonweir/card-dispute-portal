@@ -164,7 +164,8 @@ export class CardDisputesFacade {
       .pipe(
         switchMap((selection) =>
           defer(() => {
-            if (!selection) return EMPTY;
+            if (!selection)
+              return EMPTY;
 
             const transaction = 'transaction' in selection ? selection.transaction : null;
             const disputeId = transaction
@@ -173,7 +174,8 @@ export class CardDisputesFacade {
                 ? selection.dispute.id
                 : null;
 
-            if (!disputeId) return EMPTY;
+            if (!disputeId)
+              return EMPTY;
             this.detailLoading.set(true);
 
             return forkJoin({
@@ -248,7 +250,8 @@ export class CardDisputesFacade {
   }
 
   initialize(): void {
-    if (!this.context.accountId()) return;
+    if (!this.context.accountId())
+      return;
     this.overviewRequests.next();
 
     if (this.view() === 'transactions') this.loadTransactions(this.transactionPage().page);
@@ -256,7 +259,8 @@ export class CardDisputesFacade {
   }
 
   showView(view: 'transactions' | 'disputes'): void {
-    if (view === this.view() || this.saving()) return;
+    if (view === this.view() || this.saving())
+      return;
     this.viewChanged.next();
     this.view.set(view);
     this.queueSelection(null);
@@ -266,7 +270,8 @@ export class CardDisputesFacade {
   }
 
   showDisputeHistory(): void {
-    if (this.saving()) return;
+    if (this.saving())
+      return;
 
     this.statusFilter.set('');
     this.viewChanged.next();
@@ -276,19 +281,23 @@ export class CardDisputesFacade {
   }
 
   selectTransaction(transaction: Transaction): void {
-    if (!this.saving()) this.queueSelection({ transaction });
+    if (!this.saving())
+      this.queueSelection({ transaction });
   }
 
   selectDispute(dispute: Dispute): void {
-    if (!this.saving()) this.queueSelection({ dispute });
+    if (!this.saving())
+      this.queueSelection({ dispute });
   }
 
   clearSelection(): void {
-    if (!this.saving()) this.queueSelection(null);
+    if (!this.saving())
+      this.queueSelection(null);
   }
 
   retryDetails(): void {
-    if (!this.lastSelection) return;
+    if (!this.lastSelection)
+      return;
 
     const pendingDocument = this.pendingDocument();
     const documentNotice = this.documentNotice();
@@ -325,7 +334,8 @@ export class CardDisputesFacade {
   }
 
   startDispute(transaction: Transaction): void {
-    if (this.saving()) return;
+    if (this.saving())
+      return;
     this.queueSelection({ transaction });
 
     if (transaction.disputeEligible && !transaction.disputeId) {

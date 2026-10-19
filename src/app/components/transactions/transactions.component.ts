@@ -45,7 +45,9 @@ export class TransactionsComponent {
     }
 
     requestAction(transaction: Transaction): void {
-        if (transaction.disputeId) this.transactionSelected.emit(transaction);
-        else this.disputeRequested.emit(transaction);
+        if (transaction.disputeId)
+            this.transactionSelected.emit(transaction);
+        else
+            this.disputeRequested.emit(transaction);
     }
 }

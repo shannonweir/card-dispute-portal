@@ -42,7 +42,8 @@ export class CreateDisputeComponent {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
 
-    if (this.saving()) return;
+    if (this.saving())
+      return;
 
     if (file && !file.size) {
       this.fileError.set('Choose a non-empty file.');

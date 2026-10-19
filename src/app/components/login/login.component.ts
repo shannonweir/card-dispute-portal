@@ -35,7 +35,8 @@ export class LoginComponent {
             });
         }
         this.auth.isAuthenticated$.pipe(take(1)).subscribe((authenticated) => {
-            if (authenticated) void this.router.navigate(['/dashboard']);
+            if (authenticated)
+                void this.router.navigate(['/dashboard']);
         });
     }
 

@@ -38,9 +38,11 @@ export class CustomerProfileService {
     selectAccount(id: string): void {
         const accountId = id || null;
 
-        if (accountId === this.accountId()) return;
+        if (accountId === this.accountId())
+            return;
 
-        if (accountId && !this.customer()?.accounts.some((a) => a.id === accountId)) return;
+        if (accountId && !this.customer()?.accounts.some((a) => a.id === accountId))
+            return;
         this.accountId.set(accountId);
         this.changed.next();
     }

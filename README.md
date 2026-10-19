@@ -63,13 +63,14 @@ flowchart LR
     User[Customer browser] --> Portal[Angular portal]
     Portal <-->|Login and access token| Auth0[Auth0]
     Portal -->|HTTP requests with bearer token| HTTP[Angular HTTP interceptors]
-    HTTP -->|Local development: port 8080| API[Spring Boot API]
+    HTTP -->|Development: same-origin /api| Proxy[Angular proxy on port 4200]
+    Proxy -->|localhost:8080| API[Spring Boot API]
     HTTP -->|Container: same-origin /api| Nginx[Nginx on port 4200]
     Nginx -->|Docker network: service port 8080| API
     API -->|Customer and ownership checks| DB[(PostgreSQL)]
 ```
 
-The diagram shows two ways to reach the same API: local Angular development calls the backend directly; the container serves the production bundle through Nginx and proxies API requests.
+Both modes use same-origin API requests: Angular proxies them during development; Nginx proxies them in the container.
 
 | Concern | Where it lives | Responsibility |
 | --- | --- | --- |
@@ -152,7 +153,7 @@ npm ci
 npm start
 ```
 
-Open [localhost:4200](http://localhost:4200). `npm start` and `npm run start:dev` use development settings and call `http://localhost:8080/api/v1` directly, with no development proxy. Mock API and mock authentication are disabled by default.
+Open [localhost:4200](http://localhost:4200). `npm start` and `npm run start:dev` use `/api/v1`. Browser requests appear as `http://localhost:4200/api/v1/...`; [proxy.conf.json](proxy.conf.json), enabled by `serve.options.proxyConfig` in [angular.json](angular.json), forwards them to `http://localhost:8080`. Restart `ng serve` after changing proxy settings. Mock API and mock authentication are disabled by default.
 
 If the frontend container already occupies port 4200, stop it first:
 
@@ -203,14 +204,14 @@ This repository currently has no automated tests or npm test command. Build and 
 
 | Mode | Configuration | API destination |
 | --- | --- | --- |
-| Development | [environment.development.ts](src/environments/environment.development.ts) | `http://localhost:8080/api/v1` |
+| Development | [environment.development.ts](src/environments/environment.development.ts) | `/api/v1` through the Angular proxy on port 4200 |
 | Production / container | [environment.ts](src/environments/environment.ts) | `/api/v1` through the serving host |
 
 For another Auth0 tenant, update domain, SPA client ID and API audience. Keep the audience consistent with the backend. Allow `http://localhost:4200` in the Auth0 application's callback URLs, logout URLs and web origins. Backend CORS must allow the development portal origin.
 
 Browser environment files contain public configuration; do not put client secrets or database credentials in them. The frontend does not require a `.env` file.
 
-`npm run start:prod` serves the production Angular configuration, but its `/api/v1` URL requires an API proxy on the serving host. Use the Compose/Nginx setup for the complete production-style local flow.
+`npm run start:prod` serves the production Angular configuration with the same development-server proxy. Use Compose/Nginx to run the built release bundle.
 
 Optional mock flags are available in the environment files for isolated UI work. Mock mode supplies synthetic data and does not verify real authentication or customer isolation.
 
@@ -255,7 +256,7 @@ Stop the portal first because it uses the backend's Docker network. The backend 
 | Port 4200 already in use | Stop the Angular dev server or the existing frontend container |
 | External network `card-dispute-service_default` missing | Start backend Compose first, using its configured project name |
 | Portal returns 502 / Nginx cannot resolve the API | Check the backend container and shared network; run `docker compose logs -f frontend` in this checkout |
-| Local API calls fail | Check backend health on port 8080 and CORS for `http://localhost:4200` |
+| Local API calls fail | Check backend health on port 8080 and restart the Angular server to reload `proxy.conf.json` |
 | Auth0 callback or logout error | Check allowed callback/logout URLs, web origins and configured redirect URI |
 | API returns 401 | Check token acquisition, issuer, audience and expiry; sign in again |
 | API returns 403 for `/customer` | Check that the Auth0 issuer/subject is linked to a backend customer |

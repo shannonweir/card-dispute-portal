@@ -88,7 +88,8 @@ export class AuthService {
         try {
             const raw = sessionStorage.getItem(SESSION_KEY);
 
-            if (!raw) return null;
+            if (!raw)
+                return null;
 
             const session = JSON.parse(raw) as Session;
 
